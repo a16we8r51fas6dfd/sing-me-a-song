@@ -67,4 +67,22 @@ describe("recommendation service unit tests", () => {
 
     expect(recommendationService.getRandom).rejects.toEqual(notFoundError());
   });
+
+  it("should return a recommendation with score greater than 9", async () => {
+    const recommendation: Recommendation = {
+      id: 1,
+      score: 1337,
+      name: "lucia fumero - quisiera ser um robot",
+      youtubeLink: "https://www.youtube.com/watch?v=K5h-2-IW348",
+    };
+
+    jest.spyOn(Math, "random").mockReturnValueOnce(0.6);
+
+    jest
+      .spyOn(recommendationRepository, "findAll")
+      .mockResolvedValue([recommendation, { score: 5, ...recommendation }]);
+
+    const recommendationResponse = await recommendationService.getRandom();
+    expect(recommendationResponse.score).toEqual(1337);
+  });
 });

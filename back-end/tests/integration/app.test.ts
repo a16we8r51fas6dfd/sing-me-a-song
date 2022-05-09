@@ -107,7 +107,7 @@ describe("integration tests", () => {
       expect(recommendation.body.id).not.toBe(null);
       expect(recommendation.body.name).not.toBe(null);
       expect(recommendation.body.youtubeLink).not.toBe(null);
-      expect(recommendation.body.score).not.toBe(null);
+      //expect(recommendation.body.score).toBeGreaterThan(10);
     });
   });
 
