@@ -25,7 +25,7 @@ describe("recommendation service unit tests", () => {
     );
   });
 
-  it("should remove recommendation whith score below -5", async () => {
+  it("should remove recommendation with score below -5", async () => {
     const recommendation: Recommendation = {
       id: 1,
       name: "lucia fumero - quisiera ser um robot 2",
@@ -60,5 +60,11 @@ describe("recommendation service unit tests", () => {
     jest.spyOn(recommendationRepository, "find").mockResolvedValue(null);
 
     expect(recommendationService.downvote(1)).rejects.toEqual(notFoundError());
+  });
+
+  it("should return 404 if recommendations.length < 0 when get random recommendations", () => {
+    jest.spyOn(recommendationRepository, "findAll").mockResolvedValue([]);
+
+    expect(recommendationService.getRandom).rejects.toEqual(notFoundError());
   });
 });
