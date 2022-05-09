@@ -4,7 +4,7 @@ import {
 } from "../../src/services/recommendationsService.js";
 import { jest } from "@jest/globals";
 import { recommendationRepository } from "../../src/repositories/recommendationRepository.js";
-import { conflictError } from "../../src/utils/errorUtils";
+import { conflictError, notFoundError } from "../../src/utils/errorUtils";
 import { Recommendation } from "@prisma/client";
 
 describe("recommendation service unit tests", () => {
@@ -48,5 +48,17 @@ describe("recommendation service unit tests", () => {
     await recommendationService.downvote(recommendation.id);
 
     expect(removeRecommendation).toBeCalled();
+  });
+
+  it("should return 404 when upvote given an invalid recommendation id", () => {
+    jest.spyOn(recommendationRepository, "find").mockResolvedValue(null);
+
+    expect(recommendationService.upvote(1)).rejects.toEqual(notFoundError());
+  });
+
+  it("should return 404 when downvote an invalid recommendation id", () => {
+    jest.spyOn(recommendationRepository, "find").mockResolvedValue(null);
+
+    expect(recommendationService.downvote(1)).rejects.toEqual(notFoundError());
   });
 });
